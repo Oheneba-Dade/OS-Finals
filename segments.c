@@ -51,21 +51,21 @@ int translate_logical_address(SegmentTable *segment_table, int segment_number, i
     return base_number + offset;
 }
 
-int main() {
-    SegmentTable* table = createSegmentTable();
+// int main() {
+//     SegmentTable* table = createSegmentTable();
 
-    // Test printing the created SegmentTable
-    printf("Capacity: %d\n", table->capacity);
-    printf("Segment Entries:\n");
-    for (int i = 0; i < table->capacity; i++) {
-        printf("Segment %d: Base Number = %d, Size = %d\n", i + 1, table->segments[i].baseNumber, table->segments[i].size); // Use size instead of size
-    }
-    signal(SIGSEGV, sigsegv_handler);
-    // Call translate_logical_address with some values
-    printf("The number is %d\n", translate_logical_address(table, 2, 3));
+//     // Test printing the created SegmentTable
+//     printf("Capacity: %d\n", table->capacity);
+//     printf("Segment Entries:\n");
+//     for (int i = 0; i < table->capacity; i++) {
+//         printf("Segment %d: Base Number = %d, Size = %d\n", i + 1, table->segments[i].baseNumber, table->segments[i].size); // Use size instead of size
+//     }
+//     signal(SIGSEGV, sigsegv_handler);
+//     // Call translate_logical_address with some values
+//     printf("The number is %d\n", translate_logical_address(table, 2, 3));
     
 
-    free(table);
+//     free(table);
 
-    return 0;
-}
+//     return 0;
+// }

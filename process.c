@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 typedef struct{
     int id;
     int data_size;

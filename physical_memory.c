@@ -48,6 +48,7 @@ void fillMemory(int* physicalMemory, int start, int size) {
  * number of elements that can be stored in the `freeBlocks` array.
  */
 typedef struct {
-    SegmentEntry* freeBlocks;
     int capacity;
+    SegmentEntry freeBlocks[1024];
 } freeMemory;
+

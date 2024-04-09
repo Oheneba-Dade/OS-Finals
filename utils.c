@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <limits.h>
 #include "segments.h"
+#include <sys/stat.h>
+#include "process.h"
 
 
 #define MAX_SEGMENTS 4
@@ -94,6 +96,24 @@ SegmentEntry* findFreeSegments(int physicalMemory[]) {
 
     return freeSegments;
 }
+
+/**
+ * The getFileSize function retrieves the size of a file specified by the filename parameter.
+ * 
+ * @param filename The `filename` parameter is a pointer to a character array that represents the name
+ * of the file to be retrieved
+ * 
+ * @return The function `getFileSize` returns the size of the file specified by the `filename`
+ * parameter.
+ */
+int getFileSize(char *filename){
+    struct stat st;
+    stat(filename, &st);
+    int size = st.st_size;
+    return size;
+}
+
+
 
 int main (){
     return 0;

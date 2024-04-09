@@ -9,7 +9,8 @@ typedef struct {
 
 typedef struct {
     int capacity;
-    SegmentEntry segments[4]; // Maximum of 4 entries for the segment table
+    int pid;
+    SegmentEntry segments[3]; // Maximum of 4 entries for the segment table
 } SegmentTable;
 
 SegmentTable* createSegmentTable() {
@@ -20,7 +21,7 @@ SegmentTable* createSegmentTable() {
         exit(1);
     }
 
-    table->capacity = 4;
+    table->capacity = 3;
 
     // Initialize each SegmentEntry with default values
     for (int i = 0; i < table->capacity; i++) {

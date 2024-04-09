@@ -21,19 +21,19 @@ int* initializeMemory(int memorySize) {
     return physicalMemory;
 }
 
+
 /**
- * The function `fillMemory` fills a portion of physical memory with the value 1 starting from a
- * specified index.
+ * The function `fillMemory` fills a portion of an array representing physical memory with the value 1.
  * 
- * @param physicalMemory The `physicalMemory` parameter is a pointer to an integer array representing
- * the physical memory. This function `fillMemory` will fill a portion of this memory with the value
- * `1` to indicate that it is filled.
- * @param start The `start` parameter indicates the starting index in the `physicalMemory` array where
- * the filling operation should begin.
+ * @param physicalMemory The `physicalMemory` parameter is an array that represents the physical
+ * memory. The function `fillMemory` will fill a portion of this physical memory with the value 1 to
+ * indicate that it is filled.
+ * @param start The `start` parameter in the `fillMemory` function represents the starting index in the
+ * `physicalMemory` array where the filling operation will begin.
  * @param size The `size` parameter in the `fillMemory` function represents the number of elements in
  * the `physicalMemory` array that need to be filled with the value `1`.
  */
-void fillMemory(int* physicalMemory, int start, int size) {
+void fillMemory(int physicalMemory[], int start, int size) {
     for (int i = start; i < start+size; i++) {
         physicalMemory[i] = 1; //1 represents filled
     }
@@ -47,8 +47,7 @@ void fillMemory(int* physicalMemory, int start, int size) {
  * @property {int} capacity - The `capacity` property in the `freeMemory` struct represents the total
  * number of elements that can be stored in the `freeBlocks` array.
  */
-typedef struct {
-    int capacity;
-    SegmentEntry freeBlocks[1024];
-} freeMemory;
-
+// typedef struct {
+//     int capacity;
+//     SegmentEntry freeBlocks[1024];
+// } freeMemory;

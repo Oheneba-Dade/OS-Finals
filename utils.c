@@ -9,7 +9,7 @@
 #define MAX_OFFSET 100
 #define PHYSICAL_MEMORY_SIZE 1024
 #define MAX_NUM_FREE_SEGMENTS 512 
-
+// This is because the highest number of free segments for the physical memory of size 1024 is when the free segments alternate, which would be equal to 512. 
 
 typedef struct{
     int segment_number;

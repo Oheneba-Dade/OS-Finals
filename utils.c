@@ -5,18 +5,14 @@
 #include "segments.h"
 #include <sys/stat.h>
 #include "process.h"
-
-
-#define MAX_SEGMENTS 4
+#include <string.h>
+#include "utils.h"
 #define MAX_OFFSET 100
 #define PHYSICAL_MEMORY_SIZE 1024
 #define MAX_NUM_FREE_SEGMENTS 512 
 // This is because the highest number of free segments for the physical memory of size 1024 is when the free segments alternate, which would be equal to 512. 
 
-typedef struct{
-    int segment_number;
-    int offset;
-} LogicalAddress;
+
 
 
 LogicalAddress generate_random_logical_address(){
@@ -30,31 +26,26 @@ LogicalAddress generate_random_logical_address(){
 }
 
 
-/**
- * @param freeSegments The `freeSegments` parameter in the `bestFit` function is an array of
- * `SegmentEntry` structures representing the free memory segments available for allocation.
- * @param segmentSize The `segmentSize` parameter in the `bestFit` function represents the size of the
- * segment that needs to be allocated. This function is designed to find the best fit for the given
- * segment size among the free segments available in the `freeSegments` array.
- * @return The function `bestFit` is returning an array of two integers. The first integer
- * in the array represents the base number of the best fit segment found, and the second integer
- * represents the size of that segment.
- */
-int* bestFit(SegmentEntry freeSegments[], int segmentSize) {
+
+int bestFit(SegmentEntry freeSegments[], int segmentSize) {
     int numFreeSegments = sizeof(freeSegments) / sizeof(freeSegments[0]);
     int bestFitBaseAndSize[2];
-    bestFitBaseAndSize[0] = -1; // Default value indicating no best fit found
-    bestFitBaseAndSize[1] = INT_MAX; // Set to maximum possible value initially
+    int bestFitBase = -1;
+    int bestFitSize = INT_MAX;
+    // bestFitBaseAndSize[0] = -1; // Default value indicating no best fit found
+    // bestFitBaseAndSize[1] = INT_MAX; // Set to maximum possible value initially
     for (int i = 0; i < numFreeSegments; i++) {
         if (segmentSize <= freeSegments[i].size) {
             int difference = freeSegments[i].size - segmentSize;
-            if (difference < bestFitBaseAndSize[1]) {
-                bestFitBaseAndSize[0] = freeSegments[i].baseNumber;
-                bestFitBaseAndSize[1] = freeSegments[i].size;
+            if (difference < bestFitSize) {
+                // bestFitBaseAndSize[0] = freeSegments[i].baseNumber;
+                // bestFitBaseAndSize[1] = freeSegments[i].size;
+                bestFitBase = freeSegments[i].baseNumber;
+                bestFitSize = freeSegments[i].size;
             }
         }
     }
-    return bestFitBaseAndSize;
+    return bestFitBase;
 }
 
 
@@ -115,6 +106,4 @@ int getFileSize(char *filename){
 
 
 
-int main (){
-    return 0;
-}
+

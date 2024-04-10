@@ -4,7 +4,7 @@
 #include <limits.h>
 #include "segments.h"
 
-#define MAX_SEGMENTS 4
+#define MAX_SEGMENTS 3
 #define MAX_OFFSET 100
 #define PHYSICAL_MEMORY_SIZE 1024
 #define MAX_NUM_FREE_SEGMENTS 512 
@@ -15,7 +15,7 @@ typedef struct{
 } LogicalAddress;
 
 LogicalAddress generate_random_logical_address();
-int* bestFit(SegmentEntry freeSegments[], int segmentSize);
+int bestFit(SegmentEntry freeSegments[], int segmentSize);
 SegmentEntry* findFreeSegments(int physicalMemory[]);
 int getFileSize(char *filename);
 

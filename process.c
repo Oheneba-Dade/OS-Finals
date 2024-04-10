@@ -1,13 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-
-typedef struct{
-    int pid;
-    int data_size;
-    int stack_size;
-    int text_size;
-}Process;
+#include <string.h>
+#include "process.h"
+#include "utils.h"
 
 /**
  * The function creates a process with specified text, data, and stack sizes based on a given filename.
@@ -24,6 +19,7 @@ Process createProcess(char *filename){
     Process process;
 
     int size = getFileSize(filename);
+    printf(" Size is %d\n", size);   
     int textSize = size / 4;
     int dataSize = size / 4;
     int stackSize = size /2;
@@ -39,5 +35,3 @@ Process createProcess(char *filename){
     process.pid = id;
     return process;
 }
-
-// create processess based on the number specified and genrate segment table for them

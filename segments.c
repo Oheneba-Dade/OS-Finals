@@ -10,7 +10,7 @@ typedef struct {
 typedef struct {
     int capacity;
     int pid;
-    SegmentEntry segments[3]; // Maximum of 4 entries for the segment table
+    SegmentEntry segments[3]; // Maximum of 3 entries for the segment table
 } SegmentTable;
 
 SegmentTable* createSegmentTable() {

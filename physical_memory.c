@@ -51,3 +51,12 @@ void fillMemory(int physicalMemory[], int start, int size) {
 //     int capacity;
 //     SegmentEntry freeBlocks[1024];
 // } freeMemory;
+
+// print the physical memory
+void printMemory(int physicalMemory[], int memorySize) {
+    printf("Memory content:\n");
+    for (int i = 0; i < memorySize; i++) {
+        printf("%d ", physicalMemory[i]);
+    }
+    printf("\n");
+}

@@ -64,17 +64,24 @@ int main()
                     // Assign base number and size based on segment type
                     if (segmentNumber == 0)
                     {
-                        table->segments[segmentNumber].baseNumber = generate_random_base_number(); //use the best fit here
+                        // find free segments in the physical memory
+                        SegmentEntry *freeSegments = findFreeSegments(table->segments);
+                        int baseNumber = bestFit(freeSegments, process.stack_size);
+                        table->segments[segmentNumber].baseNumber = baseNumber; 
                         table->segments[segmentNumber].size = process.stack_size;
                     }
                     else if (segmentNumber == 1)
                     {
-                        table->segments[segmentNumber].baseNumber = generate_random_base_number();
+                        SegmentEntry *freeSegments = findFreeSegments(table->segments);
+                        int baseNumber = bestFit(freeSegments, process.stack_size);
+                        table->segments[segmentNumber].baseNumber = baseNumber; 
                         table->segments[segmentNumber].size = process.text_size;
                     }
-                    else if (j == 2)
+                    else if (segmentNumber == 2)
                     {
-                        table->segments[segmentNumber].baseNumber = generate_random_base_number();
+                        SegmentEntry *freeSegments = findFreeSegments(table->segments);
+                        int baseNumber = bestFit(freeSegments, process.stack_size);
+                        table->segments[segmentNumber].baseNumber = baseNumber;
                         table->segments[segmentNumber].size = process.data_size;
                     }
 

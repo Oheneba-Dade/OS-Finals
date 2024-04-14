@@ -1,5 +1,5 @@
-#ifndef OS_FINALS_PHYSICAL_MEMORY_H
-#define OS_FINALS_PHYSICAL_MEMORY_H
+#ifndef OS_FINALS_SEGMENTS_H
+#define OS_FINALS_SEGMENTS_H
 
 typedef struct {
     int baseNumber;
@@ -13,4 +13,4 @@ typedef struct {
 } SegmentTable;
 
 SegmentTable* createSegmentTable();
-#endif //OS_FINALS_PHYSICAL_MEMORY_H
+#endif //OS_FINALS_SEGMENTS_H

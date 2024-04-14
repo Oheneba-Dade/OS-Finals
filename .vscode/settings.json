@@ -1,5 +1,7 @@
 {
-    "files.associations": {
-        "stat.h": "c"
-    }
+	"files.associations": {
+		"stat.h": "c",
+		"process.h": "c",
+		"initializer_list": "c"
+	}
 }

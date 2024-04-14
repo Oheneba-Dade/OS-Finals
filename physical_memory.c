@@ -34,6 +34,7 @@ int* initializeMemory(int memorySize) {
  * the `physicalMemory` array that need to be filled with the value `1`.
  */
 void fillMemory(int physicalMemory[], int start, int size) {
+    printf("Filling memory from %d\n", start);
     for (int i = start; i < start+size; i++) {
         physicalMemory[i] = 1; //1 represents filled
     }

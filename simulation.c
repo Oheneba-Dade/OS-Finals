@@ -9,10 +9,7 @@
 #define MAX_ATTEMPTS 5
 #define FILE_DIRECTORY "processes/"
 
-int generate_random_base_number()
-{
-    return 10;
-}
+
 // Signal handler function for SIGILL
 void sigillHandler(int signum) {
     printf("Segment size greater than physical memory available).\n");
@@ -67,6 +64,7 @@ int main()
                         // find free segments in the physical memory
                         SegmentEntry *freeSegments = findFreeSegments(table->segments);
                         int baseNumber = bestFit(freeSegments, process.stack_size);
+                        printf("Base number is %d\n", baseNumber);
                         table->segments[segmentNumber].baseNumber = baseNumber; 
                         table->segments[segmentNumber].size = process.stack_size;
                     }
@@ -74,6 +72,7 @@ int main()
                     {
                         SegmentEntry *freeSegments = findFreeSegments(table->segments);
                         int baseNumber = bestFit(freeSegments, process.stack_size);
+                        printf("Base number is %d\n", baseNumber);
                         table->segments[segmentNumber].baseNumber = baseNumber; 
                         table->segments[segmentNumber].size = process.text_size;
                     }
@@ -81,6 +80,7 @@ int main()
                     {
                         SegmentEntry *freeSegments = findFreeSegments(table->segments);
                         int baseNumber = bestFit(freeSegments, process.stack_size);
+                        printf("Base number is %d\n", baseNumber);
                         table->segments[segmentNumber].baseNumber = baseNumber;
                         table->segments[segmentNumber].size = process.data_size;
                     }
@@ -101,7 +101,8 @@ int main()
                 break;
             }
         }
-        printf("Segment table size %d:\n", process.stack_size);
+        printf("Segment table 1 size %d:\n",table->segments[0].baseNumber);
+        printf("Segment table 1 size %d:\n",table->segments[1].baseNumber);
     }
 
     return 0;

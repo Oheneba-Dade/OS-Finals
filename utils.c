@@ -29,6 +29,7 @@ LogicalAddress generate_random_logical_address(){
 
 int bestFit(SegmentEntry freeSegments[], int segmentSize) {
     int numFreeSegments = sizeof(freeSegments) / sizeof(freeSegments[0]);
+    printf("Number of free segments: %d\n", numFreeSegments);
     int bestFitBaseAndSize[2];
     int bestFitBase = -1;
     int bestFitSize = INT_MAX;
@@ -40,6 +41,7 @@ int bestFit(SegmentEntry freeSegments[], int segmentSize) {
             if (difference < bestFitSize) {
                 // bestFitBaseAndSize[0] = freeSegments[i].baseNumber;
                 // bestFitBaseAndSize[1] = freeSegments[i].size;
+                printf("Got here wai!\n");
                 bestFitBase = freeSegments[i].baseNumber;
                 bestFitSize = freeSegments[i].size;
             }
@@ -55,6 +57,21 @@ int bestFit(SegmentEntry freeSegments[], int segmentSize) {
  * representing the free segments in the `physicalMemory` array.
  */
 SegmentEntry* findFreeSegments(int physicalMemory[]) {
+    physicalMemory[0] = 1;
+    physicalMemory[1] = 1;
+    physicalMemory[2] = 1;  
+    physicalMemory[3] = 1;
+
+    physicalMemory[10]=1;
+    physicalMemory[11]=1;
+    physicalMemory[12]=1;
+    physicalMemory[13]=1;
+
+    physicalMemory[20]=1;
+    physicalMemory[21]=1;
+    physicalMemory[22]=1;
+    physicalMemory[23]=1;
+    
      SegmentEntry* freeSegments = malloc(MAX_NUM_FREE_SEGMENTS * sizeof(SegmentEntry));
     int freeSegmentsIndex = 0;
     int segmentStartIndex = -1;

@@ -14,9 +14,16 @@ typedef struct{
     int offset;
 } LogicalAddress;
 
+typedef struct {
+    SegmentEntry* freeSegmentsPointer;
+    int size;
+} FreeSegmentsAndSize;
+
 LogicalAddress generate_random_logical_address();
-int bestFit(SegmentEntry freeSegments[], int segmentSize);
-SegmentEntry* findFreeSegments(int physicalMemory[]);
+int bestFit(SegmentEntry freeSegments[], int numFreeSegments, int segmentSize);
+FreeSegmentsAndSize findFreeSegments(int physicalMemory[]);
 int getFileSize(char *filename);
+void randomly_assign_segments(int memory[], int num_segments, int segment_size);
+
 
 #endif // UTILS_H

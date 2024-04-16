@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <unistd.h>
 #include "segments.h"
 
 /**
@@ -43,8 +44,8 @@ SegmentTable* createSegmentTable() {
 
     // Initialize each SegmentEntry with default values
     for (int i = 0; i < table->capacity; i++) {
-        table->segments[i].baseNumber = 0;
-        table->segments[i].size = 0;
+        table->segments[i].baseNumber = -1;
+        table->segments[i].size = -1;
     }
 
     return table;
@@ -94,22 +95,13 @@ void printSegmentTable(SegmentTable *table) {
     printf("----------------------------------\n");
 }
 
-
-// int main() {
-//     SegmentTable* table = createSegmentTable();
-
-//     // Test printing the created SegmentTable
-//     printf("Capacity: %d\n", table->capacity);
-//     printf("Segment Entries:\n");
-//     for (int i = 0; i < table->capacity; i++) {
-//         printf("Segment %d: Base Number = %d, Size = %d\n", i + 1, table->segments[i].baseNumber, table->segments[i].size); // Use size instead of size
-//     }
-//     signal(SIGSEGV, sigsegv_handler);
-//     // Call translate_logical_address with some values
-//     printf("The number is %d\n", translate_logical_address(table, 2, 3));
-    
-
-//     free(table);
-
-//     return 0;
-// }
+void printSegmentsOccupyingMemory(SegmentTable assignedSegments[], int numberOfProcesses) {
+    printf("Printing The Memory Allocation For Each Process:\n");
+    sleep(2);
+    for (int i = 0; i < numberOfProcesses; i++) {
+        if (assignedSegments[i].pid != 1) {
+            printf("Memory allocated for process with ID #%d\n", assignedSegments[i].pid);
+            printSegmentTable(&assignedSegments[i]);
+        }
+    }
+}

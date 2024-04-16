@@ -87,7 +87,7 @@ FreeSegmentsAndSize findFreeSegments(int physicalMemory[]) {
             if (segmentStartIndex != -1) {
                     SegmentEntry segment;
                     segment.baseNumber = segmentStartIndex;
-                    segment.size = i - segmentStartIndex+1;
+                    segment.size = i - segmentStartIndex;
                     printf("Free segment: base=%d, size=%d\n", segment.baseNumber, segment.size); 
                     freeSegments[freeSegmentsIndex++] = segment;
                     segmentStartIndex = -1; // Reset segmentStartIndex

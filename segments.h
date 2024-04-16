@@ -35,5 +35,6 @@ typedef struct {
 
 SegmentTable* createSegmentTable();
 void printSegmentTable(SegmentTable *table);
+void printSegmentsOccupyingMemory(SegmentTable assignedSegments[], int numberOfProcesses);
 
 #endif //OS_FINALS_SEGMENTS_H

@@ -28,7 +28,7 @@
 Process createProcess(char *filename){
     Process process;
 
-    int size = getSize(filename) / 15; //reduce the size of process
+    int size = getFileSize(filename) / 15; //reduce the size of process
     int textSize = size / 4;
     int dataSize = size / 4;
     int stackSize = size /2;

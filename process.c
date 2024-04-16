@@ -28,11 +28,7 @@ int getSize(const char *filename) {
 Process createProcess(char *filename){
     Process process;
 
-<<<<<<< HEAD
-    int size = getFileSize(filename) / 15; //reduce the size of process
-=======
     int size = getSize(filename) / 12; //reduce the size of process
->>>>>>> 8db4ade1cc002177ec7d61f6ffb793ee9bbbb5cf
     int textSize = size / 4;
     int dataSize = size / 4;
     int stackSize = size /2;

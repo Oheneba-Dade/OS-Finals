@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "process.h"
 #include "segments.h"
 #include "physical_memory.h"
+#include <math.h>
 #include "utils.h"
-#define MAX_PROCESSES 10
+#define MAX_PROCESSES 20
 #define MAX_SEGMENTS 3
 #define MAX_ATTEMPTS 5
 #define FILE_DIRECTORY "processes/"
@@ -17,7 +19,13 @@ void sigillHandler(int signum) {
     exit(1);
 }
 
-int main() {
+
+void displayStatistics(int deallocationAttempts, int memoryUsed, Process ) {
+    printf("Statistics:\n");
+    printf("Number of deallocation attempts: %d\n", deallocationAttempts);
+}
+
+int main(int argc, char *argv[]) {
     // Statistics variables for the simulation
     int deallocationAttempts = 0;
 
@@ -29,16 +37,13 @@ int main() {
     findFreeSegments(physicalMemory);
     printf("\n");
 
-    int numProcesses;
-    printf("Enter the number of processes (1-10): \n");
-    scanf("%d", &numProcesses);
-    printf("\n");
-
+    int numberOfProcess = atoi(argv[1]);
+    
     //keep track of the segments assigned to each process
-    SegmentTable assignedSegments[numProcesses ];
+    SegmentTable assignedSegments[numberOfProcess];
     int currentSegmentTableToRemove = 0;
 
-    if (numProcesses < 1 || numProcesses > MAX_PROCESSES)
+    if (numberOfProcess < 1 || numberOfProcess > MAX_PROCESSES)
     {
         printf("Invalid number of processes. Please try again.\n");
         return 1;
@@ -47,11 +52,12 @@ int main() {
    // Create an array of processes
     Process processes[MAX_PROCESSES];
 
-    for(int i=0; i < numProcesses; i++) {
+    for(int i=0; i < numberOfProcess; i++) {
         char filename[50];
         sprintf(filename, "%sprocess%d.c", FILE_DIRECTORY, i + 1);
         Process process = createProcess(filename);
-        printf("The size of process no: #%d = %d\n", i+1, process.stack_size + process.data_size + process.text_size);
+        int processSize = process.stack_size + process.data_size + process.text_size; // total process size
+        printf("The size of process no: #%d = %d\n", i+1, processSize);
         processes[i] = process;
         SegmentTable *table = createSegmentTable();
         table->pid = process.pid;
@@ -116,7 +122,7 @@ int main() {
         deallocateMemory(physicalMemory, segments[0].baseNumber, totalSize);
         printf("Memory deallocation complete.\n");
         printMemory(physicalMemory, 1024);
-        currentSegmentTableToRemove = (currentSegmentTableToRemove + 1) % numProcesses;
+        currentSegmentTableToRemove = (currentSegmentTableToRemove + 1) % numberOfProcess;
 
         // Attempt to find a best fit again
         FreeSegmentsAndSize result = findFreeSegments(physicalMemory);
@@ -141,8 +147,10 @@ int main() {
     printf("Based on the best fit algorithm, the %s of process #%d will be stored in memory starting from base number %d\n", segmentName, i + 1, baseNumber);
     fillMemory(physicalMemory, baseNumber, segmentSize);
 
+    double memoryUsed = round(((double)processSize / PHYSICAL_MEMORY_SIZE) * 100);
+    printf("Percentage of Memory used by Process: %.2f KB\n", memoryUsed);
 }
 
-        printMemory(physicalMemory, 1024);
+    printMemory(physicalMemory, 1024);
     }
 }

@@ -10,10 +10,7 @@
  * @property {int} size - The `size` property in the `SegmentEntry` struct represents the size of the
  * segment entry. It indicates the number of elements or items in the segment.
  */
-typedef struct {
-    int baseNumber;
-    int size;
-} SegmentEntry;
+
 
 /**
  * The SegmentTable struct represents a segment table with a capacity, process ID, and an array of
@@ -27,11 +24,6 @@ typedef struct {
  * @property {SegmentEntry} segments - The `segments` property in the `SegmentTable` struct is an array
  * of `SegmentEntry` structs. It has a maximum capacity of 3 entries
  */
-typedef struct {
-    int capacity;
-    int pid;
-    SegmentEntry segments[3]; // Maximum of 3 entries for the segment table
-} SegmentTable;
 
 /**
  * The function creates a SegmentTable structure with a capacity of 3 and initializes each SegmentEntry

@@ -10,7 +10,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Run the simulation with different number of processes
-for i in 12;
+for i in 9;
 do
    echo "Running simulation with $i processes"
    ./simulation $i

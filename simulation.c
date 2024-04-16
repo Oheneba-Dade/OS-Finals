@@ -125,7 +125,13 @@ int main() {
 
         baseNumber = bestFit(freeSegments, numSegments, segmentSize);        
         // print the base number of the best fit
-        printf("The base number of the best fit is %d\n", baseNumber);
+        if (baseNumber != -1) {
+            printf("The base number of the best fit is %d\n", baseNumber);
+        }
+        else {
+            printf("No best fit found after deallocation.\n");
+            deallocationAttempts++;
+        }
     }
     }
 

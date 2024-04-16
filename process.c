@@ -6,13 +6,13 @@
 #include <sys/stat.h>
 
 // temporary function to get size on macOS
-// int getSize(const char *filename) {
-//     struct stat st;
-//     if (stat(filename, &st) == 0)
-//         return st.st_size;
-//     else
-//         return -1; // Return -1 if there's an error getting file size
-// }
+int getSize(const char *filename) {
+    struct stat st;
+    if (stat(filename, &st) == 0)
+        return st.st_size;
+    else
+        return -1; // Return -1 if there's an error getting file size
+}
 
 /**
  * The function creates a process with specified text, data, and stack sizes based on a given filename.
@@ -28,7 +28,7 @@
 Process createProcess(char *filename){
     Process process;
 
-    int size = getSize(filename) / 15; //reduce the size of process
+    int size = getSize(filename) / 12; //reduce the size of process
     int textSize = size / 4;
     int dataSize = size / 4;
     int stackSize = size /2;

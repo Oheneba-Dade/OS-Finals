@@ -47,14 +47,11 @@ int bestFit(SegmentEntry freeSegments[], int numFreeSegments, int segmentSize) {
     int bestFitBaseAndSize[2];
     int bestFitBase = -1;
     int bestFitSize = INT_MAX;
-    // bestFitBaseAndSize[0] = -1; // Default value indicating no best fit found
-    // bestFitBaseAndSize[1] = INT_MAX; // Set to maximum possible value initially
     for (int i = 0; i < numFreeSegments; i++) {
         if (segmentSize <= freeSegments[i].size) {
+            
             int difference = freeSegments[i].size - segmentSize;
             if (difference < bestFitSize) {
-                // bestFitBaseAndSize[0] = freeSegments[i].baseNumber;
-                // bestFitBaseAndSize[1] = freeSegments[i].size;
                 bestFitBase = freeSegments[i].baseNumber;
                 bestFitSize = freeSegments[i].size;
             }
@@ -92,8 +89,8 @@ FreeSegmentsAndSize findFreeSegments(int physicalMemory[]) {
             if (segmentStartIndex != -1) {
                     SegmentEntry segment;
                     segment.baseNumber = segmentStartIndex;
-                    segment.size = i - segmentStartIndex;
-                    printf("Free segment: base=%d, size=%d\n", segment.baseNumber, segment.size); //was wondering if we should be printing the free spaces to make the simulation nicer
+                    segment.size = i - segmentStartIndex+1;
+                    printf("Free segment: base=%d, size=%d\n", segment.baseNumber, segment.size); 
                     freeSegments[freeSegmentsIndex++] = segment;
                     segmentStartIndex = -1; // Reset segmentStartIndex
             }
@@ -104,7 +101,8 @@ FreeSegmentsAndSize findFreeSegments(int physicalMemory[]) {
     if (segmentStartIndex != -1) {
             SegmentEntry segment;
             segment.baseNumber = segmentStartIndex;
-            printf("Free segment: base=%d, size=%d\n", segment.baseNumber, PHYSICAL_MEMORY_SIZE - segmentStartIndex); //was wondering if we should be printing the free spaces to make the simulation nicer
+            segment.size = PHYSICAL_MEMORY_SIZE - segmentStartIndex;
+            printf("Free segment: base=%d, size=%d\n", segment.baseNumber, PHYSICAL_MEMORY_SIZE - segmentStartIndex);
             freeSegments[freeSegmentsIndex++] = segment;
     }
 
@@ -154,6 +152,33 @@ void randomly_assign_segments(int memory[], int num_segments, int segment_size) 
 
         for (int j = 0; j < segment_size; j++) {
             memory[start_index + j] = 1; // Assign 1 to the memory locations within the segment
+        }
+    }
+}
+
+
+/**
+ * The function `compactMemory` reorganizes the elements in an array by moving all the non-zero
+ * elements to the beginning of the array.
+ * 
+ * @param physicalMemory The `physicalMemory` parameter is an array representing the physical memory,
+ * where each element can have a value of either 0 or 1. The function `compactMemory` is designed to
+ * compact the memory by moving all the elements with a value of 1 to the beginning of the array,
+ * maintaining
+ * @param memorySize The `memorySize` parameter in the `compactMemory` function represents the total
+ * size of the physical memory array that is being compacted. This parameter indicates the number of
+ * elements in the `physicalMemory` array that need to be processed during the memory compaction
+ * operation.
+ */
+void compactMemory(int physicalMemory[], int memorySize) {
+    int freeIndex = 0;
+    for (int i = 0; i < memorySize; i++) {
+        if (physicalMemory[i] == 1) {
+            physicalMemory[freeIndex] = physicalMemory[i];
+            if (freeIndex != i) {
+                physicalMemory[i] = 0;
+            }
+            freeIndex++;
         }
     }
 }

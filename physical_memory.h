@@ -9,6 +9,7 @@ typedef struct {
 
 int* initializeMemory(int memorySize);
 void fillMemory(int physicalMemory[], int start, int size);
+void deallocateMemory(int physicalMemory[], int start, int size);
 void printMemory(int physicalMemory[], int memorySize);
 
 #endif //OS_FINALS_PHYSICAL_MEMORY_H 

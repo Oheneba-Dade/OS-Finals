@@ -11,6 +11,8 @@
 #define FILE_DIRECTORY "processes/"
 
 
+// if best fit returns -1, it means there is no space so we first check if compaction will work, if it does not work, then we deallocate earlier processes
+
 // Signal handler function for SIGILL
 void sigillHandler(int signum) {
     printf("Segment size greater than physical memory available).\n");
@@ -18,6 +20,9 @@ void sigillHandler(int signum) {
 }
 
 int main() {
+    // Statistics variables for the simulation
+    int deallocationAttempts = 0;
+
     int* physicalMemory = initializeMemory(1024);
     randomly_assign_segments(physicalMemory, 3, 6);
     printMemory(physicalMemory, 1024);
@@ -27,6 +32,10 @@ int main() {
     printf("Enter the number of processes (1-10): \n");
     scanf("%d", &numProcesses);
 
+    //keep track of the segments assigned to each process
+    SegmentTable assignedSegments[numProcesses ];
+    int currentSegmentTableToRemove = 0;
+
     if (numProcesses < 1 || numProcesses > MAX_PROCESSES)
     {
         printf("Invalid number of processes. Please try again.\n");
@@ -34,7 +43,7 @@ int main() {
     }
 
     // flag array to keep track of assigned segments
-    int assignedSegments[MAX_SEGMENTS] = {0};
+    // int assignedSegments[MAX_SEGMENTS] = {0};
     Process processes[MAX_PROCESSES];
 
     for(int i=0; i < numProcesses; i++) {
@@ -46,142 +55,73 @@ int main() {
         SegmentTable *table = createSegmentTable();
         table->pid = process.pid;
 
-        for(int j=0; j < 3; j++) {
-            if (j == 0) {
-                     // find free segments in the physical memory
-                        printf("Attempting to find free segment for the stack of process #%d with size = %d\n", i+1, process.stack_size);
-                        // SegmentEntry *freeSegments = findFreeSegments(physicalMemory);
-                        FreeSegmentsAndSize result = findFreeSegments(physicalMemory);
-                        SegmentEntry *freeSegments = result.freeSegmentsPointer;
-                        int numSegments = result.size;
-                        // int numSegments = sizeof(freeSegments) / sizeof(freeSegments[0]);
-                        int baseNumber = bestFit(freeSegments, numSegments, process.stack_size);
-                        fillMemory(physicalMemory, baseNumber, process.stack_size);
-                        table->segments[j].baseNumber = baseNumber; 
-                        table->segments[j].size = process.stack_size;
-            }
-            else if (j==1) {
-                 // find free segments in the physical memory
-                        printf("Attempting to find free segment for the text of process #%d with size = %d\n", i+1, process.text_size);
-                        // SegmentEntry *freeSegments = findFreeSegments(physicalMemory);
-                        FreeSegmentsAndSize result = findFreeSegments(physicalMemory);
-                        SegmentEntry *freeSegments = result.freeSegmentsPointer;
-                        int numSegments = result.size;
-                        // int numSegments = sizeof(freeSegments) / sizeof(freeSegments[0]);
-                        int baseNumber = bestFit(freeSegments, numSegments, process.text_size);
-                        fillMemory(physicalMemory, baseNumber, process.text_size);
-                        table->segments[j].baseNumber = baseNumber; 
-                        table->segments[j].size = process.text_size;
-            }
-            else {
-                        // find free segments in the physical memory
-                        printf("Attempting to find free segment for the data of process #%d with size = %d\n", i+1, process.data_size);
-                        // SegmentEntry *freeSegments = findFreeSegments(physicalMemory);
-                        FreeSegmentsAndSize result = findFreeSegments(physicalMemory);
-                        SegmentEntry *freeSegments = result.freeSegmentsPointer;
-                        int numSegments = result.size;
-                        // int numSegments = sizeof(freeSegments) / sizeof(freeSegments[0]);
-                        int baseNumber = bestFit(freeSegments, numSegments, process.data_size);
-                        fillMemory(physicalMemory, baseNumber, process.data_size);
-                        table->segments[j].baseNumber = baseNumber; 
-                        table->segments[j].size = process.data_size;
-            }
+        for (int j = 0; j < 3; j++) {
+        int segmentSize;
+        const char *segmentName;
+
+        switch (j) {
+            case 0:
+                segmentSize = process.stack_size;
+                segmentName = "stack";
+                break;
+            case 1:
+                segmentSize = process.text_size;
+                segmentName = "text";
+                break;
+            case 2:
+                segmentSize = process.data_size;
+                segmentName = "data";
+                break;
+            default:
+                break;
         }
+
+    printf("Attempting to find free segment for the %s of process #%d with size = %d\n", segmentName, i + 1, segmentSize);
+
+    FreeSegmentsAndSize result = findFreeSegments(physicalMemory);
+    SegmentEntry *freeSegments = result.freeSegmentsPointer;
+    int numSegments = result.size;
+
+    int baseNumber = bestFit(freeSegments, numSegments, segmentSize);
+    
+    // if (baseNumber == -1) { // If best fit returns -1, it means there is no available best fit currently
+    //     printf("No best fit found for the %s of process #%d with size = %d\n", segmentName, i + 1, segmentSize);
+    //     printf("Attempting to compact memory...\n");
+    //     compactMemory(physicalMemory);
+    //     printf("Memory compaction complete.\n");
+    //     printf("Attempting to find free segment for the %s of process #%d with size = %d\n", segmentName, i + 1, segmentSize);
+    //     baseNumber = bestFit(freeSegments, numSegments, segmentSize);
+    // }
+
+
+    if (baseNumber == -1) {
+        printf("No space after compaction...\n");
+
+        while (baseNumber == -1 ) {
+        printf("Attempting to free space by deallocating an earlier process...\n");
+        printf("Deallocating process with PID = %d\n", assignedSegments[currentSegmentTableToRemove].pid);
+        // calculate the total size of the process to be deallocated using the assignedSegments array
+        int totalSize = 0;
+        SegmentEntry *segments = assignedSegments[currentSegmentTableToRemove].segments;
+        
+        for (int k = 0; k < 3; k++) {
+            printf("Segment size = %d\n", segments[k].size);
+            totalSize += segments[k].size;
+        }
+
+        printf("The total size of this process being removed is %d\n", totalSize);
+        deallocateMemory(physicalMemory, segments[0].baseNumber, totalSize);
+        currentSegmentTableToRemove = (currentSegmentTableToRemove + 1) % numProcesses;
+    }
+    }
+    table->segments[j].baseNumber = baseNumber;
+    table->segments[j].size = segmentSize;
+    assignedSegments[i] = *table;
+    // printf("This is the segment size i am looking for %d\n",assignedSegments[i].segments[j].size);
+    fillMemory(physicalMemory, baseNumber, segmentSize);
+
+}
+
         printMemory(physicalMemory, 1024);
     }
 }
-
-// int main()
-// {
-//     int physicalMemory[] = initializeMemory(1024);
-//     int numProcesses;
-//     printf("Enter the number of processes (1-10): \n");
-//     scanf("%d", &numProcesses);
-
-//     if (numProcesses < 1 || numProcesses > MAX_PROCESSES)
-//     {
-//         printf("Invalid number of processes. Please try again.\n");
-//         return 1;
-//     }
-
-//     // flag array to keep track of assigned segments
-//     int assignedSegments[MAX_SEGMENTS] = {0};
-//     Process processes[MAX_PROCESSES];
-
-
-//     for (int i = 0; i < numProcesses; i++)
-//     {
-//         char filename[50];
-//         sprintf(filename, "%sprocess%d.c", FILE_DIRECTORY, i + 1);
-//         Process process = createProcess(filename);
-//         processes[i] = process;
-//         SegmentTable *table = createSegmentTable();
-//         table->pid = process.pid;
-
-//         // generate random logical addresses
-//         for (int j = 0; j < MAX_SEGMENTS; j++)
-//         {
-//             int attempts = 0;
-
-//             // Generate logical address and attempt to assign segment
-//             while (attempts < MAX_ATTEMPTS)
-//             {
-//                 LogicalAddress address = generate_random_logical_address();
-//                 int segmentNumber = address.segment_number;
-
-//                 // Check if segment number is already assigned
-//                 if (assignedSegments[segmentNumber] == 0)
-//                 {
-//                     // Mark segment as assigned
-//                     assignedSegments[segmentNumber] = 1;
-
-//                     // Assign base number and size based on segment type
-//                     if (segmentNumber == 0)
-//                     {
-//                         // find free segments in the physical memory
-//                         SegmentEntry *freeSegments = findFreeSegments(physicalMemory);
-//                         int baseNumber = bestFit(freeSegments, process.stack_size);
-//                         fillMemory(physicalMemory, baseNumber, process.stack_size);
-//                         table->segments[segmentNumber].baseNumber = baseNumber; 
-//                         table->segments[segmentNumber].size = process.stack_size;
-//                     }
-//                     else if (segmentNumber == 1)
-//                     {
-//                         SegmentEntry *freeSegments = findFreeSegments(physicalMemory);
-//                         int baseNumber = bestFit(freeSegments, process.text_size);
-//                         fillMemory(physicalMemory, baseNumber, process.text_size);
-//                         table->segments[segmentNumber].baseNumber = baseNumber; 
-//                         table->segments[segmentNumber].size = process.text_size;
-//                     }
-//                     else if (segmentNumber == 2)
-//                     {
-//                         SegmentEntry *freeSegments = findFreeSegments(physicalMemory);
-//                         int baseNumber = bestFit(freeSegments, process.data_size);
-//                         fillMemory(physicalMemory, baseNumber, process.data_size);
-//                         table->segments[segmentNumber].baseNumber = baseNumber;
-//                         table->segments[segmentNumber].size = process.data_size;
-//                     }
-
-//                     break;
-//                 }
-//                 else
-//                 {
-//                     // Segment already assigned, try again
-//                     printf("Segment %d already assigned. Trying again...\n", segmentNumber);
-//                     attempts++;
-//                 }
-//             }
-
-//             // Check if maximum attempts reached without assigning the segment
-//             if (attempts == MAX_ATTEMPTS)
-//             {
-//                 break;
-//             }
-//         }
-//         printf("Segment base number %d:\n",  table->segments[0].baseNumber);
-//         printf("Segment base number %d:\n",  table->segments[1].baseNumber);
-//         printf("Segment base number %d:\n",  table->segments[2].baseNumber);
-//     }
-
-//     return 0;
-// }

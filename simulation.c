@@ -7,9 +7,7 @@
 #include "physical_memory.h"
 #include <math.h>
 #include "utils.h"
-
-
-#define MAX_PROCESSES 20
+#define MAX_PROCESSES 10
 #define MAX_SEGMENTS 3
 #define MAX_ATTEMPTS 5
 #define FILE_DIRECTORY "processes/"
@@ -22,7 +20,7 @@ void sigillHandler(int signum) {
 }
 
 
-void displayStatistics(int deallocationAttempts, int memoryUsed, Process ) {
+void displayStatistics(int deallocationAttempts, int memoryUsed, Process process) {
     printf("Statistics:\n");
     printf("Number of deallocation attempts: %d\n", deallocationAttempts);
 }
@@ -30,7 +28,12 @@ void displayStatistics(int deallocationAttempts, int memoryUsed, Process ) {
 int main(int argc, char *argv[]) {
     // Statistics variables for the simulation
     int deallocationAttempts = 0;
+    int array[] = {1, 1, 0, 1, 1, 0, 1, 1, 0, 0};
+    moveZeroesToEnd(array, 10);
 
+    for (int i = 0; i < 10; i++) {
+        printf("%d", array[i]);
+    }
     int* physicalMemory = initializeMemory(1024);
     randomly_assign_segments(physicalMemory, 3, 6);
     printf("Initial memory state:\n");

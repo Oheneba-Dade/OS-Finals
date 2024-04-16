@@ -24,5 +24,5 @@ int bestFit(SegmentEntry freeSegments[], int numFreeSegments, int segmentSize);
 FreeSegmentsAndSize findFreeSegments(int physicalMemory[]);
 int getFileSize(char *filename);
 void randomly_assign_segments(int memory[], int num_segments, int segment_size);
-
+int moveZeroesToEnd(int arr[], int n);
 #endif // UTILS_H

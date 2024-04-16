@@ -11,8 +11,6 @@
 #define FILE_DIRECTORY "processes/"
 
 
-// if best fit returns -1, it means there is no space so we first check if compaction will work, if it does not work, then we deallocate earlier processes
-
 // Signal handler function for SIGILL
 void sigillHandler(int signum) {
     printf("Segment size greater than physical memory available).\n");
@@ -26,11 +24,15 @@ int main() {
     int* physicalMemory = initializeMemory(1024);
     randomly_assign_segments(physicalMemory, 3, 6);
     printMemory(physicalMemory, 1024);
+
     printf("Calculating how many free segments exist currently...\n");
     findFreeSegments(physicalMemory);
+    printf("\n");
+
     int numProcesses;
     printf("Enter the number of processes (1-10): \n");
     scanf("%d", &numProcesses);
+    printf("\n");
 
     //keep track of the segments assigned to each process
     SegmentTable assignedSegments[numProcesses ];
@@ -42,8 +44,7 @@ int main() {
         return 1;
     }
 
-    // flag array to keep track of assigned segments
-    // int assignedSegments[MAX_SEGMENTS] = {0};
+   // Create an array of processes
     Process processes[MAX_PROCESSES];
 
     for(int i=0; i < numProcesses; i++) {
@@ -76,12 +77,11 @@ int main() {
                 break;
         }
 
-    printf("Attempting to find free segment for the %s of process #%d with size = %d\n", segmentName, i + 1, segmentSize);
+    printf("Attempting to find free space in memory for the %s of process #%d with size = %d\n", segmentName, i + 1, segmentSize);
 
     FreeSegmentsAndSize result = findFreeSegments(physicalMemory);
     SegmentEntry *freeSegments = result.freeSegmentsPointer;
     int numSegments = result.size;
-
     int baseNumber = bestFit(freeSegments, numSegments, segmentSize);
     
     // if (baseNumber == -1) { // If best fit returns -1, it means there is no available best fit currently
@@ -128,10 +128,11 @@ int main() {
         printf("The base number of the best fit is %d\n", baseNumber);
     }
     }
+
     table->segments[j].baseNumber = baseNumber;
     table->segments[j].size = segmentSize;
     assignedSegments[i] = *table;
-    // printf("This is the segment size i am looking for %d\n",assignedSegments[i].segments[j].size);
+    printf("Based on the best fit algorithm, the %s of process #%d will be stored in memory starting from base number %d\n", segmentName, i + 1, baseNumber);
     fillMemory(physicalMemory, baseNumber, segmentSize);
 
 }

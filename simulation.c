@@ -28,12 +28,7 @@ void displayStatistics(int deallocationAttempts, int memoryUsed, Process process
 int main(int argc, char *argv[]) {
     // Statistics variables for the simulation
     int deallocationAttempts = 0;
-    int array[] = {1, 1, 0, 1, 1, 0, 1, 1, 0, 0};
-    moveZeroesToEnd(array, 10);
 
-    for (int i = 0; i < 10; i++) {
-        printf("%d", array[i]);
-    }
     int* physicalMemory = initializeMemory(1024);
     randomly_assign_segments(physicalMemory, 3, 6);
     printf("Initial memory state:\n");

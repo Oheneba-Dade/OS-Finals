@@ -32,7 +32,7 @@ int* initializeMemory(int memorySize) {
  * the `physicalMemory` array that need to be filled with the value `1`.
  */
 void fillMemory(int physicalMemory[], int start, int size) {
-    printf("Filling memory from %d\n", start);
+    printf("Filling memory from %d\n\n", start);
     for (int i = start; i < start+size; i++) {
         physicalMemory[i] = 1; //1 represents filled
     }
@@ -47,7 +47,7 @@ void fillMemory(int physicalMemory[], int start, int size) {
  * slots that need to be deallocated starting from the `start` index in the `physicalMemory` array.
  */
 void deallocateMemory(int physicalMemory[], int start, int size) {
-    printf("Deallocating memory from %d\n", start);
+    printf("Deallocating memory from %d\n\n", start);
     for (int i = start; i < start+size; i++) {
         physicalMemory[i] = 0; //0 represents empty
     }

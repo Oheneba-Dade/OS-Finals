@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include "segments.h"
 
 /**
  * The SegmentEntry struct contains two integer fields, baseNumber and size.
@@ -76,6 +77,31 @@ int translate_logical_address(SegmentTable *segment_table, int segment_number, i
     int base_number = segment_table->segments[segment_number].baseNumber;
     return base_number + offset;
 }
+
+void printSegmentTable(SegmentTable *table) {
+    printf("----------------------------------\n");
+    printf("| Segment | Base Number | Size    |\n");
+    printf("----------------------------------\n");
+    for (int i = 0; i < MAX_SEGMENTS; i++) {
+        const char *segmentName;
+        switch (i) {
+            case 0:
+                segmentName = "Stack";
+                break;
+            case 1:
+                segmentName = "Text";
+                break;
+            case 2:
+                segmentName = "Data";
+                break;
+            default:
+                break;
+        }
+        printf("| %-7s | %-11d | %-7d |\n", segmentName, table->segments[i].baseNumber, table->segments[i].size);
+    }
+    printf("----------------------------------\n");
+}
+
 
 // int main() {
 //     SegmentTable* table = createSegmentTable();

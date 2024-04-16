@@ -168,21 +168,8 @@ void randomly_assign_segments(int memory[], int num_segments, int segment_size) 
  * elements in the `physicalMemory` array that need to be processed during the memory compaction
  * operation.
  */
-void compactMemory(int physicalMemory[], int memorySize) {
-    int freeIndex = 0;
-    for (int i = 0; i < memorySize; i++) {
-        if (physicalMemory[i] == 1) {
-            physicalMemory[freeIndex] = physicalMemory[i];
-            if (freeIndex != i) {
-                physicalMemory[i] = 0;
-            }
-            freeIndex++;
-        }
-    }
-}
 
-
-void moveZeroesToEnd(int arr[], int n) {
+void compactMemory(int arr[], int n) {
     int count = 0; 
     for (int i = 0; i < n; i++)
         if (arr[i] != 0)

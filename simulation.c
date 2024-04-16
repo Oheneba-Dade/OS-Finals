@@ -98,19 +98,26 @@ int main(int argc, char *argv[]) {
     sleep(2);
     printf("\n");
     
-    // if (baseNumber == -1) { // If best fit returns -1, it means there is no available best fit currently
-    //     printf("No best fit found for the %s of process #%d with size = %d\n", segmentName, i + 1, segmentSize);
-    //     printf("Attempting to compact memory...\n");
-    //     compactMemory(physicalMemory);
-    //     printf("Memory compaction complete.\n");
-    //     printf("Attempting to find free segment for the %s of process #%d with size = %d\n", segmentName, i + 1, segmentSize);
-    //     baseNumber = bestFit(freeSegments, numSegments, segmentSize);
-    // }
+    if (baseNumber == -1) { // If best fit returns -1, it means there is no available best fit currently
+        printf("No best fit found for the %s of process #%d with size = %d\n", segmentName, i + 1, segmentSize);
+        printf("Attempting to compact memory...\n");
+        compactMemory(physicalMemory, PHYSICAL_MEMORY_SIZE);
+        printf("Memory compaction complete.\n");
+        printf("Attempting to find free segment for the %s of process #%d with size = %d\n", segmentName, i + 1, segmentSize);
+
+        //updating base numbers of segments after compaction
+         int start = 0;
+        for (int k =0; k< sizeof(assignedSegments)/sizeof(assignedSegments[0]);k++){
+            SegmentEntry* segments = assignedSegments[k].segments;
+            for (int l = 0; l < 3; l++) {
+                segments[l].baseNumber = start;
+                start += segments[l].size;
+            }
+        }
+        baseNumber = bestFit(freeSegments, numSegments, segmentSize);
+    }
 
     // If after compaction, there is still no best fit, deallocate an earlier process and try again. while loop to try again to find a best fit.
-    // This is just a placeholder
-
-
     if (baseNumber == -1) {
         printf("No space after compaction...\n");
         sleep(2);
@@ -173,7 +180,7 @@ int main(int argc, char *argv[]) {
     sleep(2);
 
     double memoryUsed = round(((double)processSize / PHYSICAL_MEMORY_SIZE) * 100);
-    printf("Percentage of Memory used by Process: %.2f KB\n", memoryUsed);
+    printf("Percentage of Memory used by Process: %.2f%%\n", memoryUsed);
     sleep(2);
 }
 

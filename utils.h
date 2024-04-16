@@ -25,5 +25,4 @@ FreeSegmentsAndSize findFreeSegments(int physicalMemory[]);
 int getFileSize(char *filename);
 void randomly_assign_segments(int memory[], int num_segments, int segment_size);
 
-
 #endif // UTILS_H

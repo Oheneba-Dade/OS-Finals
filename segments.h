@@ -1,6 +1,8 @@
 #ifndef OS_FINALS_SEGMENTS_H
 #define OS_FINALS_SEGMENTS_H
 
+#define MAX_SEGMENTS 3
+
 typedef struct {
     int baseNumber;
     int size;
@@ -13,4 +15,6 @@ typedef struct {
 } SegmentTable;
 
 SegmentTable* createSegmentTable();
+void printSegmentTable(SegmentTable *table);
+
 #endif //OS_FINALS_SEGMENTS_H

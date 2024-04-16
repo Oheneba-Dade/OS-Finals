@@ -6,7 +6,6 @@
 #include "physical_memory.h"
 #include "utils.h"
 #define MAX_PROCESSES 10
-#define MAX_SEGMENTS 3
 #define MAX_ATTEMPTS 5
 #define FILE_DIRECTORY "processes/"
 
@@ -83,6 +82,7 @@ int main() {
     SegmentEntry *freeSegments = result.freeSegmentsPointer;
     int numSegments = result.size;
     int baseNumber = bestFit(freeSegments, numSegments, segmentSize);
+    printf("\n");
     
     // if (baseNumber == -1) { // If best fit returns -1, it means there is no available best fit currently
     //     printf("No best fit found for the %s of process #%d with size = %d\n", segmentName, i + 1, segmentSize);
@@ -123,7 +123,8 @@ int main() {
         SegmentEntry *freeSegments = result.freeSegmentsPointer;
         numSegments = result.size;
 
-        baseNumber = bestFit(freeSegments, numSegments, segmentSize);        
+        baseNumber = bestFit(freeSegments, numSegments, segmentSize); 
+        printf("\n");       
         // print the base number of the best fit
         if (baseNumber != -1) {
             printf("The base number of the best fit is %d\n", baseNumber);
@@ -139,6 +140,7 @@ int main() {
     table->segments[j].size = segmentSize;
     assignedSegments[i] = *table;
     printf("Based on the best fit algorithm, the %s of process #%d will be stored in memory starting from base number %d\n", segmentName, i + 1, baseNumber);
+    printSegmentTable(table);
     fillMemory(physicalMemory, baseNumber, segmentSize);
 
 }

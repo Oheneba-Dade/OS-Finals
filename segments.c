@@ -99,9 +99,7 @@ void printSegmentsOccupyingMemory(SegmentTable assignedSegments[], int numberOfP
     printf("Printing The Memory Allocation For Each Process:\n");
     sleep(2);
     for (int i = 0; i < numberOfProcesses; i++) {
-        if (assignedSegments[i].pid != 1) {
-            printf("Memory allocated for process with ID #%d\n", assignedSegments[i].pid);
-            printSegmentTable(&assignedSegments[i]);
-        }
+        printf("Memory allocated for process with ID #%d\n", assignedSegments[i].pid);
+        printSegmentTable(&assignedSegments[i]);
     }
 }

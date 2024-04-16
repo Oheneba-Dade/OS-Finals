@@ -7,7 +7,7 @@
 #include "physical_memory.h"
 #include <math.h>
 #include "utils.h"
-#define MAX_PROCESSES 10
+#define MAX_PROCESSES 20
 #define MAX_SEGMENTS 3
 #define MAX_ATTEMPTS 5
 #define FILE_DIRECTORY "processes/"
@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
         printf("Attempting to find free segment for the %s of process #%d with size = %d\n", segmentName, i + 1, segmentSize);
 
         //updating base numbers of segments after compaction
-         int start = 0;
+        int start = 0;
         for (int k =0; k < sizeof(assignedSegments)/sizeof(assignedSegments[0]);k++){
             SegmentEntry* segments = assignedSegments[k].segments;
             for (int l = 0; l < 3; l++) {
@@ -119,6 +119,10 @@ int main(int argc, char *argv[]) {
                 start += segments[l].size;
             }
         }
+
+       result = findFreeSegments(physicalMemory);
+        SegmentEntry *freeSegments = result.freeSegmentsPointer;
+        numSegments = result.size;
         baseNumber = bestFit(freeSegments, numSegments, segmentSize);
 
             if (baseNumber == -1) {
@@ -189,7 +193,7 @@ int main(int argc, char *argv[]) {
     double memoryUsed = round(((double)processSize / PHYSICAL_MEMORY_SIZE) * 100);
     printf("Percentage of Memory used by Process: %.2f%%\n", memoryUsed);
     sleep(1);
-    printSegmentsOccupyingMemory(assignedSegments,   sizeof(assignedSegments)/sizeof(assignedSegments[0]));
+    printSegmentsOccupyingMemory(assignedSegments,   i+1);
     sleep(1);
     }
 }

@@ -93,6 +93,9 @@ int main() {
     //     baseNumber = bestFit(freeSegments, numSegments, segmentSize);
     // }
 
+    // If after compaction, there is still no best fit, deallocate an earlier process and try again. while loop to try again to find a best fit.
+    // This is just a placeholder
+
 
     if (baseNumber == -1) {
         printf("No space after compaction...\n");
@@ -111,7 +114,18 @@ int main() {
 
         printf("The total size of this process being removed is %d\n", totalSize);
         deallocateMemory(physicalMemory, segments[0].baseNumber, totalSize);
+        printf("Memory deallocation complete.\n");
+        printMemory(physicalMemory, 1024);
         currentSegmentTableToRemove = (currentSegmentTableToRemove + 1) % numProcesses;
+
+        // Attempt to find a best fit again
+        FreeSegmentsAndSize result = findFreeSegments(physicalMemory);
+        SegmentEntry *freeSegments = result.freeSegmentsPointer;
+        numSegments = result.size;
+
+        baseNumber = bestFit(freeSegments, numSegments, segmentSize);        
+        // print the base number of the best fit
+        printf("The base number of the best fit is %d\n", baseNumber);
     }
     }
     table->segments[j].baseNumber = baseNumber;

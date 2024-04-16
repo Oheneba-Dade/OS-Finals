@@ -4,8 +4,6 @@
 #include "segments.h"
 
 /**
-<<<<<<< HEAD
-=======
  * The SegmentEntry struct contains two integer fields, baseNumber and size.
  * @property {int} baseNumber - The `baseNumber` property in the `SegmentEntry` struct represents the
  * starting number or value of a segment in the physical memory.
@@ -28,7 +26,6 @@
  */
 
 /**
->>>>>>> 3a7dfd02cc9a731882675829b17a34bd700b0009
  * The function creates a SegmentTable structure with a capacity of 3 and initializes each SegmentEntry
  * with default values.
  * 

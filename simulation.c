@@ -33,11 +33,14 @@ int main(int argc, char *argv[]) {
 
     int* physicalMemory = initializeMemory(1024);
     randomly_assign_segments(physicalMemory, 3, 6);
+    printf("Initial memory state:\n");
     printMemory(physicalMemory, 1024);
 
+    sleep(2);
     printf("Calculating how many free segments exist currently...\n");
     findFreeSegments(physicalMemory);
     printf("\n");
+    sleep(2);
 
     int numberOfProcess = atoi(argv[1]);
     
@@ -53,13 +56,15 @@ int main(int argc, char *argv[]) {
 
    // Create an array of processes
     Process processes[MAX_PROCESSES];
-
+    printf("Creating %d processes...\n", numberOfProcess);
+    sleep(2);
     for(int i=0; i < numberOfProcess; i++) {
         char filename[50];
         sprintf(filename, "%sprocess%d.c", FILE_DIRECTORY, i + 1);
         Process process = createProcess(filename);
         int processSize = process.stack_size + process.data_size + process.text_size; // total process size
         printf("The size of process no: #%d = %d\n", i+1, processSize);
+        sleep(2);
         processes[i] = process;
         SegmentTable *table = createSegmentTable();
         table->pid = process.pid;
@@ -86,11 +91,13 @@ int main(int argc, char *argv[]) {
         }
 
     printf("Attempting to find free space in memory for the %s of process #%d with size = %d\n", segmentName, i + 1, segmentSize);
+    sleep(2);
 
     FreeSegmentsAndSize result = findFreeSegments(physicalMemory);
     SegmentEntry *freeSegments = result.freeSegmentsPointer;
     int numSegments = result.size;
     int baseNumber = bestFit(freeSegments, numSegments, segmentSize);
+    sleep(2);
     printf("\n");
     
     // if (baseNumber == -1) { // If best fit returns -1, it means there is no available best fit currently
@@ -108,38 +115,50 @@ int main(int argc, char *argv[]) {
 
     if (baseNumber == -1) {
         printf("No space after compaction...\n");
+        sleep(2);
 
         while (baseNumber == -1 ) {
         printf("Attempting to free space by deallocating an earlier process...\n");
+        sleep(2);
         printf("Deallocating process with PID = %d\n", assignedSegments[currentSegmentTableToRemove].pid);
+        sleep(2);
         // calculate the total size of the process to be deallocated using the assignedSegments array
         int totalSize = 0;
         SegmentEntry *segments = assignedSegments[currentSegmentTableToRemove].segments;
         
         for (int k = 0; k < 3; k++) {
             printf("Segment size = %d\n", segments[k].size);
+            sleep(2);
             totalSize += segments[k].size;
         }
 
         printf("The total size of this process being removed is %d\n", totalSize);
+        sleep(2);
         deallocateMemory(physicalMemory, segments[0].baseNumber, totalSize);
+        sleep(2);
         printf("Memory deallocation complete.\n");
+        sleep(2);
         printMemory(physicalMemory, 1024);
+        sleep(2);
         currentSegmentTableToRemove = (currentSegmentTableToRemove + 1) % numberOfProcess;
 
         // Attempt to find a best fit again
         FreeSegmentsAndSize result = findFreeSegments(physicalMemory);
+        sleep(2);
         SegmentEntry *freeSegments = result.freeSegmentsPointer;
         numSegments = result.size;
 
-        baseNumber = bestFit(freeSegments, numSegments, segmentSize); 
+        baseNumber = bestFit(freeSegments, numSegments, segmentSize);
+        sleep(2);
         printf("\n");       
         // print the base number of the best fit
         if (baseNumber != -1) {
             printf("The base number of the best fit is %d\n", baseNumber);
+            sleep(2);
         }
         else {
             printf("No best fit found after deallocation.\n");
+            sleep(2);
             deallocationAttempts++;
         }
     }
@@ -149,13 +168,18 @@ int main(int argc, char *argv[]) {
     table->segments[j].size = segmentSize;
     assignedSegments[i] = *table;
     printf("Based on the best fit algorithm, the %s of process #%d will be stored in memory starting from base number %d\n", segmentName, i + 1, baseNumber);
+    sleep(2);
     printSegmentTable(table);
+    sleep(2);
     fillMemory(physicalMemory, baseNumber, segmentSize);
+    sleep(2);
 
     double memoryUsed = round(((double)processSize / PHYSICAL_MEMORY_SIZE) * 100);
     printf("Percentage of Memory used by Process: %.2f KB\n", memoryUsed);
+    sleep(2);
 }
 
     printMemory(physicalMemory, 1024);
+    sleep(2);
     }
 }
